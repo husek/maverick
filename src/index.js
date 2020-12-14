@@ -1,13 +1,45 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import { Provider } from 'react-redux'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme, StylesProvider, ThemeProvider } from '@material-ui/core/styles';
+import orange from '@material-ui/core/colors/orange';
+import green from '@material-ui/core/colors/green';
+import App from './routes/app/App';
 import reportWebVitals from './reportWebVitals';
+import ApiClient from './services/apiClient';
+import configureStore from './redux/create';
+import GlobalStyle from './styles';
+
+
+const client = new ApiClient();
+const { store } = configureStore(client);
+
+
+const theme = createMuiTheme({
+  palette: {
+    secondary: {
+      main: green[900],
+    },
+    primary: {
+      main: orange[800],
+    },
+  },
+});
+
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <React.Fragment>
+    <GlobalStyle />
+    <CssBaseline />
+    <ThemeProvider theme={theme}>
+      <StylesProvider injectFirst>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </StylesProvider>
+    </ThemeProvider>
+  </React.Fragment>,
   document.getElementById('root')
 );
 
